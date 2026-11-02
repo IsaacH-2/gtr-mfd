@@ -1,0 +1,13 @@
+{
+  "name": "gtr-mfd",
+  "version": "0.1.0",
+  "description": "An R35-style multifunction display for your GitHub profile, redrawn nightly from your activity.",
+  "type": "module",
+  "bin": { "gtr-mfd": "index.js" },
+  "scripts": {
+    "build": "node index.js",
+    "demo": "node index.js --demo"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}

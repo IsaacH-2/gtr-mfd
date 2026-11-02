@@ -1,0 +1,33 @@
+# Put this file in your profile repo (the one named after your username) at .github/workflows/mfd.yml.
+# It redraws the display every night and pushes it to an `output` branch,
+# so your main branch history stays clean.
+
+name: GT-R MFD
+
+on:
+  schedule:
+    - cron: "17 8 * * *"   # 08:17 UTC = just after midnight Pacific
+  workflow_dispatch:        # lets you run it by hand from the Actions tab
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  draw:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: IsaacH-2/gtr-mfd@main
+        with:
+          output: out/gtr-mfd.svg
+
+      - name: Push to the output branch
+        run: |
+          cd out
+          git init -q -b output
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "Redraw MFD $(date -u +%F)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" output

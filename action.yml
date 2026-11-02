@@ -1,0 +1,28 @@
+name: "GT-R MFD"
+description: "Draw an R35-style multifunction display from a GitHub account's public activity."
+branding:
+  icon: "activity"
+  color: "red"
+inputs:
+  github_user:
+    description: "Account to draw. Defaults to the repository owner."
+    required: false
+    default: ${{ github.repository_owner }}
+  output:
+    description: "Where to write the animated SVG. Static per-page SVGs land next to it."
+    required: false
+    default: "dist/gtr-mfd.svg"
+  github_token:
+    description: "Token for the GraphQL API."
+    required: false
+    default: ${{ github.token }}
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+      run: node "${{ github.action_path }}/index.js" --user "${{ inputs.github_user }}" --out "${{ inputs.output }}"
